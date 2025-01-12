@@ -8,6 +8,7 @@ import { TextField } from '@mui/material';
 function Login() {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -23,16 +24,27 @@ function Login() {
   async function submit(e) {
     e.preventDefault();
 
-    const res = await fetch(
-      `https://dummyjson.com/test/users/filter?key=username&value=${username}`
-    );
-    const { status } = await res.json();
-    if (status !== 'ok') {
+    // const res = await fetch(
+    //   `https://dummyjson.com/test/users/filter?key=username&value=${username}`
+    // );
+
+    const res = await fetch('https://dummyjson.com/user/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: 'emilys',
+        password: 'emilyspass',
+      }),
+    });
+
+    if (res.status === 400) {
+      console.log('Username or password is not correct');
       return;
     }
 
+    const user = await res.json();
     console.log('Successfully login');
-    dispatch(login({ username: username, isAuthenticated: true }));
+    dispatch(login({ ...user, isAuthenticated: true }));
     navigate('/dashboard');
   }
   return (
@@ -45,6 +57,14 @@ function Login() {
           variant='outlined'
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+        />
+        <TextField
+          id='password-input'
+          type='password'
+          label='Password'
+          variant='outlined'
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <Button variant='contained' type='submit'>
           Submit

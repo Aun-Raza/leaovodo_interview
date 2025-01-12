@@ -1,7 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
+  id: -1,
   username: '',
+  firstName: '',
+  lastName: '',
+  gender: '',
+  image: '',
+  refreshToken: '',
+  accessToken: '',
   isAuthenticated: false,
 };
 
@@ -10,8 +17,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      state.username = action.payload.username;
-      state.isAuthenticated = true;
+      Object.assign(state, action.payload);
     },
   },
 });
