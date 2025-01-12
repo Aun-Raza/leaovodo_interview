@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { login } from '../state/user/userSlice';
+import Button from '@mui/material/Button';
+import { TextField } from '@mui/material';
 
 function Login() {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
@@ -37,8 +39,17 @@ function Login() {
     <>
       <h1>Login</h1>
       <form onSubmit={submit}>
-        <input value={username} onChange={(e) => setUsername(e.target.value)} />
-        <button type='submit'>Submit</button>
+        <TextField
+          id='username-input'
+          label='User'
+          variant='outlined'
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <Button variant='contained' type='submit'>
+          Submit
+        </Button>
+        ;
       </form>
     </>
   );
