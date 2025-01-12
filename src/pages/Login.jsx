@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '../state/user/userSlice';
 
 function Login() {
   const [username, setUsername] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   async function submit(e) {
     e.preventDefault();
 
@@ -11,10 +14,13 @@ function Login() {
       `https://dummyjson.com/test/users/filter?key=username&value=${username}`
     );
     const { status } = await res.json();
-    if (status === 'ok') {
-      console.log('Successfully login');
-      navigate('/dashboard');
+    if (status !== 'ok') {
+      return;
     }
+
+    console.log('Successfully login');
+    dispatch(login({ username: username }));
+    navigate('/dashboard');
   }
   return (
     <>
