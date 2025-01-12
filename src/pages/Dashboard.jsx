@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Card, CardContent, Avatar } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Avatar,
+  Button,
+} from '@mui/material';
+import { logout } from '../state/user/userSlice';
 
 function Dashboard() {
   const token = useSelector((state) => state.user.accessToken);
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   const navigate = useNavigate();
   const [userDetail, setUserDetail] = useState({});
+  const dispatch = useDispatch();
 
   async function authenticate() {
     if (isAuthenticated) {
@@ -26,6 +35,11 @@ function Dashboard() {
     const userDetail = await res.json();
     setUserDetail(userDetail);
     console.log(userDetail);
+  }
+
+  function handleLogout() {
+    dispatch(logout());
+    navigate('/');
   }
 
   useEffect(() => {
@@ -106,15 +120,15 @@ function Dashboard() {
             <Typography variant='body1' color='text.secondary'>
               Address:{' '}
               <p>
-                {address.address}, {address.city}, {address.state} (
-                {address.stateCode})
+                {address?.address || 'N/A'}, {address?.city || 'N/A'},{' '}
+                {address?.state || 'N/A'} ({address?.stateCode || 'N/A'})
               </p>
             </Typography>
 
             <Typography variant='body1' color='text.secondary'>
               Company:{' '}
               <p>
-                {company.name}, {company.title}
+                {company?.name || 'N/A'}, {company?.title || 'N/A'}
               </p>
             </Typography>
 
@@ -123,6 +137,14 @@ function Dashboard() {
             </Typography>
           </CardContent>
         </Card>
+        <Button
+          variant='contained'
+          color='error'
+          sx={{ marginTop: 2 }}
+          onClick={handleLogout}
+        >
+          Logout
+        </Button>
       </Box>
     )
   );
