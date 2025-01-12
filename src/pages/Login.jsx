@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { login } from '../state/user/userSlice';
 import Button from '@mui/material/Button';
-import { TextField } from '@mui/material';
+import { Box, TextField, Typography } from '@mui/material';
 
 function Login() {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
@@ -48,15 +48,38 @@ function Login() {
     navigate('/dashboard');
   }
   return (
-    <>
-      <h1>Login</h1>
-      <form onSubmit={submit}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        bgcolor: '#f9f9f9',
+        padding: 2,
+      }}
+    >
+      <Typography variant='h4' gutterBottom>
+        Login
+      </Typography>
+      <Box
+        component='form'
+        onSubmit={submit}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+          width: '100%',
+          maxWidth: 400,
+        }}
+      >
         <TextField
           id='username-input'
           label='User'
           variant='outlined'
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          fullWidth
         />
         <TextField
           id='password-input'
@@ -65,13 +88,13 @@ function Login() {
           variant='outlined'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          fullWidth
         />
-        <Button variant='contained' type='submit'>
+        <Button variant='contained' type='submit' fullWidth>
           Submit
         </Button>
-        ;
-      </form>
-    </>
+      </Box>
+    </Box>
   );
 }
 
