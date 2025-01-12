@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { login } from '../state/user/userSlice';
 
 function Login() {
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
   const [username, setUsername] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  async function authenticate() {
+    if (!isAuthenticated) return;
+    else navigate('/dashboard');
+  }
+
+  useEffect(() => {
+    authenticate();
+  }, []);
+
   async function submit(e) {
     e.preventDefault();
 
@@ -19,7 +30,7 @@ function Login() {
     }
 
     console.log('Successfully login');
-    dispatch(login({ username: username }));
+    dispatch(login({ username: username, isAuthenticated: true }));
     navigate('/dashboard');
   }
   return (
